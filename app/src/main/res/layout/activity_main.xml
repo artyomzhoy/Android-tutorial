@@ -17,10 +17,9 @@
         android:layout_margin="5dp" />
 
     <LinearLayout
-        android:id="@+id/Layout"
+        android:id="@+id/LayoutChoice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
         android:orientation="horizontal">
 
         <Button
@@ -37,11 +36,28 @@
             android:layout_margin="5dp"
             android:text="@string/false_button" />
     </LinearLayout>
-    <Button
-        android:id="@+id/ButtonNext"
+
+    <LinearLayout
+        android:id="@+id/LayoutNavigation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="@string/next_button" />
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ButtonPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:src="@drawable/arrow_left"/>
+
+        <ImageButton
+            android:id="@+id/ButtonNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:src="@drawable/arrow_right" />
+
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -36,24 +36,40 @@ public class MainActivity extends AppCompatActivity {
     private int mCurrentIndex = 0;
     private boolean isUserAnswered = false;
     boolean isQA = mQuestionBank[mCurrentIndex].isQuestionAnswered();
+    private int rightAnswers = 0;
+
 
     private void updateQuestion() {
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
+        if (mQuestionBank[mCurrentIndex].isQuestionAnswered()) {
+            mFalseButton.setEnabled(false);
+            mTrueButton.setEnabled(false);
+        } else {
+            mFalseButton.setEnabled(true);
+            mTrueButton.setEnabled(true);
+        }
     }
+
 
     private void checkAnswer(boolean userChoice) {
         boolean answerIsRight = mQuestionBank[mCurrentIndex].isRightAnswer();
         int messageResId = 0;
-
         if (userChoice == answerIsRight) {
             messageResId = R.string.correct_toast;
+            rightAnswers =+ 1;
         } else {
             messageResId = R.string.incorrect_toast;
         }
+        mFalseButton.setEnabled(false);
+        mTrueButton.setEnabled(false);
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
 
+            if (mCurrentIndex == (mQuestionBank.length - 1)) {
+        messageResId = R.string.right_answers_percent_toast;
+        Toast.makeText(this, messageResId + (rightAnswers * 100 / mQuestionBank.length) + R.string.percent, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +85,6 @@ public class MainActivity extends AppCompatActivity {
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isQA) {
-                    isUserAnswered = false;
-                }
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
             }
@@ -81,11 +94,9 @@ public class MainActivity extends AppCompatActivity {
             mFalseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!isUserAnswered) {
                         checkAnswer(false);
                         mQuestionBank[mCurrentIndex].setQuestionAnswered(true);
-                    }
-                    isUserAnswered = true;
+
                 }
         });
 
@@ -93,32 +104,23 @@ public class MainActivity extends AppCompatActivity {
             mTrueButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!isUserAnswered) {
                         checkAnswer(true);
                         mQuestionBank[mCurrentIndex].setQuestionAnswered(true);
                     }
-                    isUserAnswered = true;
-                }
             });
 
          mNextButton = (ImageButton) findViewById(R.id.ButtonNext);
              mNextButton.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
-                     if(!isQA) {
-                         isUserAnswered = false;
-                     }
                      mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                      updateQuestion();
-             }
+                 }
          });
          mPreviousButton = (ImageButton) findViewById(R.id.ButtonPrevious);
              mPreviousButton.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
-                     if(isQA) {
-                         isUserAnswered = false;
-                     }
                      mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
                      if (mCurrentIndex < 0) {
                          mCurrentIndex = mQuestionBank.length - 1;

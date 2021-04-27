@@ -3,6 +3,15 @@ package com.example.geoquiz;
 public class Question {
     private int mTextResId;
     private boolean mRightAnswer;
+    private boolean mIsQuestionAnswered;
+
+    public boolean isQuestionAnswered() {
+        return mIsQuestionAnswered;
+    }
+
+    public void setQuestionAnswered(boolean questionAnswered) {
+        mIsQuestionAnswered = questionAnswered;
+    }
 
     public Question(int textResId, boolean rightAnswer) {
         mTextResId = textResId;

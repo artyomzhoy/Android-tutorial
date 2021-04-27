@@ -116,8 +116,8 @@ public class MainActivity extends AppCompatActivity {
              mPreviousButton.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
-                     if(!isQA) {
-                         isUserAnswered = true;
+                     if(isQA) {
+                         isUserAnswered = false;
                      }
                      mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
                      if (mCurrentIndex < 0) {

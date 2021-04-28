@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean isUserAnswered = false;
     boolean isQA = mQuestionBank[mCurrentIndex].isQuestionAnswered();
     private int rightAnswers = 0;
-    private int answers = 0;
 
 
     private void updateQuestion() {
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         int messageResId = 0;
         if (userChoice == answerIsRight) {
             messageResId = R.string.correct_toast;
-            rightAnswers =+ 1;
+            rightAnswers += 1;
         } else {
             messageResId = R.string.incorrect_toast;
         }
@@ -68,11 +67,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void result () {
-        if (mQuestionBank[mCurrentIndex].isQuestionAnswered()) {
-            answers =+ 1;
+        int answers = 0;
+        for (int i = 0; i < mQuestionBank.length; i++) {
+            if (mQuestionBank[i].isQuestionAnswered()) {
+                answers += 1;
+            }
         }
         if (answers == mQuestionBank.length) {
-            Toast.makeText(this, R.string.right_answers_percent_toast + (rightAnswers * 100 / mQuestionBank.length) + R.string.percent, Toast.LENGTH_SHORT).show();
+            String text = getString(R.string.right_answers_percent_toast);
+            String percent = getString(R.string.percent);
+            int value = (rightAnswers * 100 / mQuestionBank.length);
+            String val = Integer.toString(value);
+            String result = text + " " + val + percent;
+            Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
         }
     }
 

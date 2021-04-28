@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isUserAnswered = false;
     boolean isQA = mQuestionBank[mCurrentIndex].isQuestionAnswered();
     private int rightAnswers = 0;
+    private int answers = 0;
 
 
     private void updateQuestion() {
@@ -66,9 +67,13 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
 
-            if (mCurrentIndex == (mQuestionBank.length - 1)) {
-        messageResId = R.string.right_answers_percent_toast;
-        Toast.makeText(this, messageResId + (rightAnswers * 100 / mQuestionBank.length) + R.string.percent, Toast.LENGTH_SHORT).show();
+    private void result () {
+        if (mQuestionBank[mCurrentIndex].isQuestionAnswered()) {
+            answers =+ 1;
+        }
+        if (answers == mQuestionBank.length) {
+            Toast.makeText(this, R.string.right_answers_percent_toast + (rightAnswers * 100 / mQuestionBank.length) + R.string.percent, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -87,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
+                result();
             }
         });
 
@@ -115,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
                  public void onClick(View v) {
                      mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                      updateQuestion();
+                     result();
                  }
          });
          mPreviousButton = (ImageButton) findViewById(R.id.ButtonPrevious);
@@ -126,9 +133,11 @@ public class MainActivity extends AppCompatActivity {
                          mCurrentIndex = mQuestionBank.length - 1;
                      }
                      updateQuestion();
+                     result();
                  }
              });
              updateQuestion();
+             result();
     }
     @Override
     public void onStart() {

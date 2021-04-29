@@ -34,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private int mCurrentIndex = 0;
-    private boolean isUserAnswered = false;
-    boolean isQA = mQuestionBank[mCurrentIndex].isQuestionAnswered();
     private int rightAnswers = 0;
 
 

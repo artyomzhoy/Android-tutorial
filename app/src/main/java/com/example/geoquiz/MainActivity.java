@@ -3,6 +3,7 @@ package com.example.geoquiz;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton mNextButton;
     private ImageButton mPreviousButton;
     private TextView mQuestionTextView;
+    private Button mCheatButton;
 
     private Question[] mQuestionBank = new Question[] {
             new Question(R.string.question_australia, true),
@@ -118,6 +120,16 @@ public class MainActivity extends AppCompatActivity {
                         checkAnswer(true);
                         mQuestionBank[mCurrentIndex].setQuestionAnswered(true);
                     }
+            });
+
+         mCheatButton = (Button) findViewById(R.id.ButtonCheat);
+            mCheatButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean answerIsTrue = mQuestionBank[mCurrentIndex].isRightAnswer();
+                    Intent intent = CheatActivity.newIntent(MainActivity.this, answerIsTrue);
+                    startActivity(intent);
+                }
             });
 
          mNextButton = (ImageButton) findViewById(R.id.ButtonNext);

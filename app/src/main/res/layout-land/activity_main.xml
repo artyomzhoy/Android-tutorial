@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context=".MainActivity">
 
     <TextView
@@ -38,18 +39,22 @@
             android:text="@string/false_button" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/LayoutNavigation"
+    <Button
+        android:id="@+id/ButtonCheat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:orientation="horizontal">
+        android:layout_margin="5dp"
+        android:layout_gravity="center_horizontal||bottom"
+        android:text="@string/cheat_button" />
+
+
 
         <ImageButton
             android:id="@+id/ButtonPrevious"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:layout_gravity="bottom||start"
             android:src="@drawable/arrow_left" />
 
         <ImageButton
@@ -57,9 +62,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:layout_gravity="bottom||end"
             android:src="@drawable/arrow_right" />
 
 
-    </LinearLayout>
 
 </FrameLayout>

@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final String KEY_INDEX = "index";
     private static final String ANSWER_INDEX = "answer_index";
+    private static final String RIGHT_ANSWERS = "right_answers";
     private static final int REQUEST_CODE_CHEAT = 0;
 
     private Button mTrueButton;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void result () {
         int answers = 0;
+
         for (int i = 0; i < mQuestionBank.length; i++) {
             if (mQuestionBank[i].isQuestionAnswered()) {
                 answers += 1;
@@ -103,10 +105,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
-        }
-        if (savedInstanceState != null) {
-            mQuestionBank[mCurrentIndex].isQuestionAnswered() = savedInstanceState.getBoolean(ANSWER_INDEX, false);
-        }
+            rightAnswers = savedInstanceState.getInt(RIGHT_ANSWERS, 0);
+            for (int i = 0; i < mQuestionBank.length; i++) {
+                boolean answered = savedInstanceState.getBoolean(ANSWER_INDEX + i);
+                mQuestionBank[i].setQuestionAnswered(answered);
+                }
+            }
 
         mQuestionTextView = (TextView) findViewById(R.id.TextView);
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
@@ -207,7 +211,10 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
-        savedInstanceState.putBoolean(ANSWER_INDEX, mQuestionBank[mCurrentIndex].isQuestionAnswered());
+        for (int i = 0; i < mQuestionBank.length; i++) {
+            savedInstanceState.putBoolean(ANSWER_INDEX + i, mQuestionBank[i].isQuestionAnswered());
+        }
+        savedInstanceState.putInt(RIGHT_ANSWERS, rightAnswers);
     }
 
     @Override

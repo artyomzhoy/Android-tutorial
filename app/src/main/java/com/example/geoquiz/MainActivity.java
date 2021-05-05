@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String ANSWER_INDEX = "answer_index";
     private static final String RIGHT_ANSWERS = "right_answers";
     private static final int REQUEST_CODE_CHEAT = 0;
+    private static final String IS_CHEATER = "is_cheater";
+    private static final String TEST = "test";
+
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -41,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int mCurrentIndex = 0;
     private int rightAnswers = 0;
-    private boolean mIsCheater;
-
+    private boolean mIsCheater = false;
 
     private void updateQuestion() {
         int question = mQuestionBank[mCurrentIndex].getTextResId();
@@ -63,16 +65,18 @@ public class MainActivity extends AppCompatActivity {
     private void checkAnswer(boolean userChoice) {
         boolean answerIsRight = mQuestionBank[mCurrentIndex].isRightAnswer();
         int messageResId = 0;
-        if (mIsCheater) {
-            messageResId = R.string.judgement_toast;
-        } else {
-            if (userChoice == answerIsRight) {
-                messageResId = R.string.correct_toast;
-                rightAnswers += 1;
+            if (mIsCheater) {
+                //mQuestionBank[mCurrentIndex].setUserCheat(true);
+                messageResId = R.string.judgement_toast;
             } else {
-                messageResId = R.string.incorrect_toast;
+                if (userChoice == answerIsRight) {
+                    messageResId = R.string.correct_toast;
+                    rightAnswers += 1;
+                } else {
+                    messageResId = R.string.incorrect_toast;
+                }
             }
-        }
+
         mFalseButton.setEnabled(false);
         mTrueButton.setEnabled(false);
         mCheatButton.setEnabled(false);
@@ -109,7 +113,12 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < mQuestionBank.length; i++) {
                 boolean answered = savedInstanceState.getBoolean(ANSWER_INDEX + i);
                 mQuestionBank[i].setQuestionAnswered(answered);
+            }
+            for (int i = 0; i < mQuestionBank.length; i++) {
+                boolean cheated = savedInstanceState.getBoolean(IS_CHEATER, false);
+                mQuestionBank[i].setUserCheat(cheated);
                 }
+            mIsCheater = savedInstanceState.getBoolean(TEST, false);
             }
 
         mQuestionTextView = (TextView) findViewById(R.id.TextView);
@@ -117,7 +126,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-                mIsCheater = false;
+
+                    mIsCheater = mQuestionBank[mCurrentIndex].isUserCheat();
+
                 updateQuestion();
                 result();
             }
@@ -139,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                         checkAnswer(true);
                         mQuestionBank[mCurrentIndex].setQuestionAnswered(true);
+
                     }
             });
 
@@ -157,7 +169,9 @@ public class MainActivity extends AppCompatActivity {
                  @Override
                  public void onClick(View v) {
                      mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-                     mIsCheater = false;
+
+                     mIsCheater = mQuestionBank[mCurrentIndex].isUserCheat();
+
                      updateQuestion();
                      result();
                  }
@@ -170,6 +184,9 @@ public class MainActivity extends AppCompatActivity {
                      if (mCurrentIndex < 0) {
                          mCurrentIndex = mQuestionBank.length - 1;
                      }
+
+                     mIsCheater = mQuestionBank[mCurrentIndex].isUserCheat();
+
                      updateQuestion();
                      result();
                  }
@@ -188,6 +205,11 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             mIsCheater = CheatActivity.wasAnswerShown(data);
+        }
+
+            if (mIsCheater) {
+                mQuestionBank[mCurrentIndex].setUserCheat(true);
+
         }
     }
 
@@ -211,10 +233,17 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putInt(RIGHT_ANSWERS, rightAnswers);
+        savedInstanceState.putBoolean(TEST, mIsCheater);
+
         for (int i = 0; i < mQuestionBank.length; i++) {
             savedInstanceState.putBoolean(ANSWER_INDEX + i, mQuestionBank[i].isQuestionAnswered());
         }
-        savedInstanceState.putInt(RIGHT_ANSWERS, rightAnswers);
+
+        for (int i = 0; i < mQuestionBank.length; i++) {
+            savedInstanceState.putBoolean(IS_CHEATER + i, mQuestionBank[i].isUserCheat());
+        }
+
     }
 
     @Override

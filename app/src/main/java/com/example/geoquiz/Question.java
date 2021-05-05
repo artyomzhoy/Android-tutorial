@@ -4,6 +4,17 @@ public class Question {
     private int mTextResId;
     private boolean mRightAnswer;
     private boolean mIsQuestionAnswered;
+    private boolean mIsUserCheat;
+
+    public boolean isUserCheat() {
+        return mIsUserCheat;
+    }
+
+    public void setUserCheat(boolean userCheat) {
+        mIsUserCheat = userCheat;
+    }
+
+
 
     public boolean isQuestionAnswered() {
         return mIsQuestionAnswered;
